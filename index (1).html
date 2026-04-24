@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Haswanth Avirneni — Full-Stack Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg:        #080c10;
+    --bg2:       #0d1219;
+    --bg3:       #111820;
+    --border:    #1e2a38;
+    --accent:    #3b82f6;
+    --accent2:   #06b6d4;
+    --gold:      #f59e0b;
+    --text:      #e2e8f0;
+    --muted:     #64748b;
+    --subtle:    #1e293b;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ── GRID BACKGROUND ── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(59,130,246,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59,130,246,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 clamp(1.5rem, 5vw, 4rem);
+    height: 64px;
+    background: rgba(8,12,16,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  /* ── SECTIONS ── */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: clamp(5rem, 10vw, 8rem) clamp(1.5rem, 8vw, 10rem);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 100px;
+    max-width: 100%;
+    padding-left: clamp(1.5rem, 8vw, 10rem);
+    padding-right: clamp(1.5rem, 8vw, 10rem);
+  }
+
+  .hero-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .hero-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.2s;
+  }
+
+  .hero-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.35s;
+  }
+
+  .hero-name .line2 {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(226,232,240,0.25);
+  }
+
+  .hero-title {
+    font-family: 'DM Mono', monospace;
+    font-size: clamp(0.85rem, 1.5vw, 1rem);
+    color: var(--accent2);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.5s;
+  }
+
+  .hero-desc {
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.65s;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.8s;
+  }
+
+  .btn-primary {
+    padding: 0.75rem 1.75rem;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .btn-primary:hover { background: #2563eb; transform: translateY(-1px); }
+
+  .btn-outline {
+    padding: 0.75rem 1.75rem;
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s, transform 0.2s;
+  }
+
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+
+  /* PHOTO */
+  .hero-photo {
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.5s;
+  }
+
+  .photo-frame {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: var(--bg3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .photo-frame::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    background: conic-gradient(var(--accent), var(--accent2), var(--accent));
+    z-index: -1;
+    animation: spin 4s linear infinite;
+  }
+
+  .photo-frame::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border-radius: 50%;
+    background: var(--bg3);
+    z-index: 0;
+  }
+
+  .photo-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .photo-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+  }
+
+  .photo-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  /* ── SECTION HEADER ── */
+  .sec-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+
+  .sec-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+  }
+
+  .sec-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    letter-spacing: -0.02em;
+  }
+
+  .sec-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── ABOUT ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .about-text p {
+    color: var(--muted);
+    margin-bottom: 1rem;
+    line-height: 1.9;
+  }
+
+  .about-text p strong { color: var(--text); }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .stat-box {
+    background: var(--bg2);
+    padding: 1.75rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 2.2rem;
+    color: var(--accent);
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── EXPERIENCE ── */
+  .exp-item {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 2rem;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .exp-item:first-child { border-top: 1px solid var(--border); }
+
+  .exp-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    padding-top: 0.2rem;
+    letter-spacing: 0.05em;
+  }
+
+  .exp-company {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 0.15rem;
+  }
+
+  .exp-role {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent2);
+    margin-bottom: 0.8rem;
+    letter-spacing: 0.05em;
+  }
+
+  .exp-bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .exp-bullets li {
+    color: var(--muted);
+    font-size: 0.9rem;
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .exp-bullets li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 0.75rem;
+  }
+
+  /* ── PROJECTS ── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .project-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: border-color 0.25s, transform 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .project-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+  .project-card:hover::before { transform: scaleX(1); }
+
+  .project-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .project-icon {
+    width: 40px; height: 40px;
+    border-radius: 8px;
+    background: var(--subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+  }
+
+  .project-links { display: flex; gap: 0.5rem; }
+
+  .project-link {
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .project-link:hover { border-color: var(--accent); color: var(--accent); }
+
+  .project-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+  }
+
+  .project-desc {
+    font-size: 0.87rem;
+    color: var(--muted);
+    line-height: 1.7;
+    flex: 1;
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    background: var(--subtle);
+    color: var(--accent2);
+    letter-spacing: 0.03em;
+  }
+
+  /* ── SKILLS ── */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .skill-group {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+  }
+
+  .skill-group-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .skill-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .skill-pill {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--text);
+    background: var(--bg3);
+  }
+
+  /* ── CONTACT ── */
+  #contact {
+    text-align: center;
+  }
+
+  .contact-box {
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  .contact-email {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+    display: block;
+    margin: 1.5rem 0;
+    transition: color 0.2s;
+  }
+
+  .contact-email:hover { color: var(--accent2); }
+
+  .contact-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .contact-link:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    border-top: 1px solid var(--border);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-photo { display: none; }
+    .about-grid { grid-template-columns: 1fr; }
+    .exp-item { grid-template-columns: 1fr; gap: 0.5rem; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#hero">HA<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">about</a></li>
+    <li><a href="#experience">experience</a></li>
+    <li><a href="#projects">projects</a></li>
+    <li><a href="#skills">skills</a></li>
+    <li><a href="#certifications">certifications</a></li>
+    <li><a href="#contact">contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-content">
+      <p class="hero-tag">// Full-Stack Developer &amp; CS Student</p>
+      <h1 class="hero-name">
+        Haswanth<br/>
+        <span class="line2">Avirneni</span>
+      </h1>
+      <p class="hero-title">Spring Boot · React · AI/ML · Real-Time Systems</p>
+      <p class="hero-desc">
+        Sophomore CS student at George Mason University with volunteer software engineering
+        experience building data-driven, full-stack applications. Skilled in dashboard design,
+        KPI tracking, process documentation, and translating data into clear insights.
+      </p>
+      <div class="hero-btns">
+        <a class="btn-primary" href="#projects">View Projects</a>
+        <a class="btn-outline" href="#contact">Get In Touch</a>
+      </div>
+    </div>
+    <div class="hero-photo">
+      <div class="photo-frame">
+        <div class="photo-inner" id="photoWrapper">
+          <img id="profilePhoto" src="" alt="Haswanth Avirneni" style="display:none; width:180px; height:180px; border-radius:50%; object-fit:cover; position:relative; z-index:1;"/>
+          <div id="photoPlaceholder" style="display:flex; flex-direction:column; align-items:center; gap:0.5rem;">
+            <div class="photo-icon">👤</div>
+            <span class="photo-label">CLICK TO ADD PHOTO</span>
+          </div>
+          <input type="file" id="photoInput" accept="image/*" style="position:absolute; inset:0; opacity:0; cursor:pointer; z-index:2; border-radius:50%;"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="sec-header reveal">
+    <span class="sec-num">01</span>
+    <h2 class="sec-title">About</h2>
+    <div class="sec-line"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>I'm <strong>Haswanth Avirneni</strong>, a sophomore pursuing a Bachelor of Science in Computer Science at <strong>George Mason University</strong>, graduating May 2028.</p>
+      <p>I specialize in building <strong>full-stack web applications</strong> with a focus on secure backend architecture, real-time systems, and AI-powered features. I've independently shipped 4 production-grade projects spanning e-commerce, healthcare, AI/ML, and developer tooling.</p>
+      <p>I've contributed as a <strong>Software Engineering Intern (Volunteer)</strong> at Moxie IT Solutions Inc, where I worked on the EventBricks event ticketing platform — gaining real-world Agile experience building scalable features for a live product.</p>
+    </div>
+    <div class="about-stats reveal">
+      <div class="stat-box">
+        <span class="stat-num">4</span>
+        <span class="stat-label">Full-Stack Projects</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">10+</span>
+        <span class="stat-label">Technologies</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">GMU</span>
+        <span class="stat-label">George Mason University</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">2028</span>
+        <span class="stat-label">Expected Graduation</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="sec-header reveal">
+    <span class="sec-num">02</span>
+    <h2 class="sec-title">Experience</h2>
+    <div class="sec-line"></div>
+  </div>
+
+  <div class="exp-item reveal">
+    <div class="exp-date">May 2025 — Aug 2025</div>
+    <div>
+      <div class="exp-company">Moxie IT Solutions Inc</div>
+      <div class="exp-role">SOFTWARE ENGINEERING INTERN (VOLUNTEER) · REMOTE</div>
+      <ul class="exp-bullets">
+        <li>Developed key features for <strong>EventBricks</strong>, an event ticketing e-commerce platform enabling users to browse events, book tickets, manage orders, and process payments.</li>
+        <li>Built data tracking modules for ticket inventory, booking status, and order history, providing real-time visibility into operational metrics.</li>
+        <li>Collaborated in Agile sprint planning and stand-ups, tracking milestones and delivering features on schedule across cross-functional teams.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="exp-item reveal">
+    <div class="exp-date">2026 — Present</div>
+    <div>
+      <div class="exp-company">George Mason University</div>
+      <div class="exp-role">PEER TUTOR &amp; CS CLUB MEMBER</div>
+      <ul class="exp-bullets">
+        <li>Assist fellow CS students with debugging and core concepts across Data Structures, OOP, and Java.</li>
+        <li>Participate in coding challenges, hackathons, and weekly technical workshops.</li>
+        <li>Independently built 4 full-stack projects outside coursework, managing each end-to-end from planning through deployment.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="sec-header reveal">
+    <span class="sec-num">03</span>
+    <h2 class="sec-title">Projects</h2>
+    <div class="sec-line"></div>
+  </div>
+  <div class="projects-grid">
+
+    <div class="project-card reveal">
+      <div class="project-top">
+        <div class="project-icon">🛍️</div>
+        <div class="project-links">
+          <a class="project-link" href="#" title="GitHub">⌥</a>
+        </div>
+      </div>
+      <div class="project-name">ShopNest</div>
+      <p class="project-desc">Full-stack e-commerce platform with 13 REST API controllers, JWT auth, role-based access control, and an Admin Dashboard featuring 4 real-time KPI charts tracking revenue, orders, and users.</p>
+      <div class="project-tags">
+        <span class="tag">Spring Boot</span>
+        <span class="tag">React</span>
+        <span class="tag">MySQL</span>
+        <span class="tag">JWT</span>
+        <span class="tag">Recharts</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-top">
+        <div class="project-icon">🏥</div>
+        <div class="project-links">
+          <a class="project-link" href="#" title="GitHub">⌥</a>
+        </div>
+      </div>
+      <div class="project-name">HospitalQ</div>
+      <p class="project-desc">Real-time hospital queue management system with WebSocket live updates, automated SMS & email reminders via Twilio & SendGrid, and a tri-role dashboard for patients, doctors, and admins.</p>
+      <div class="project-tags">
+        <span class="tag">Spring Boot</span>
+        <span class="tag">WebSocket</span>
+        <span class="tag">Twilio</span>
+        <span class="tag">SendGrid</span>
+        <span class="tag">React</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-top">
+        <div class="project-icon">🤖</div>
+        <div class="project-links">
+          <a class="project-link" href="#" title="GitHub">⌥</a>
+        </div>
+      </div>
+      <div class="project-name">ConnectAI</div>
+      <p class="project-desc">AI-powered social platform with a TF-IDF recommendation engine, OpenAI API sentiment analysis on posts, personalized feed ranking, and Recharts sentiment trend dashboards.</p>
+      <div class="project-tags">
+        <span class="tag">Python</span>
+        <span class="tag">Flask</span>
+        <span class="tag">scikit-learn</span>
+        <span class="tag">OpenAI API</span>
+        <span class="tag">React</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-top">
+        <div class="project-icon">🔗</div>
+        <div class="project-links">
+          <a class="project-link" href="#" title="GitHub">⌥</a>
+        </div>
+      </div>
+      <div class="project-name">DevLink</div>
+      <p class="project-desc">Developer social networking platform with real-time direct messaging via WebSocket, tag-based project discovery, in-app notification system, and profile privacy controls.</p>
+      <div class="project-tags">
+        <span class="tag">Spring Boot</span>
+        <span class="tag">React</span>
+        <span class="tag">WebSocket</span>
+        <span class="tag">MySQL</span>
+        <span class="tag">JWT</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="sec-header reveal">
+    <span class="sec-num">04</span>
+    <h2 class="sec-title">Skills</h2>
+    <div class="sec-line"></div>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-group reveal">
+      <div class="skill-group-label">Languages</div>
+      <div class="skill-pills">
+        <span class="skill-pill">Java</span>
+        <span class="skill-pill">Python</span>
+        <span class="skill-pill">JavaScript</span>
+        <span class="skill-pill">SQL</span>
+        <span class="skill-pill">HTML</span>
+        <span class="skill-pill">CSS</span>
+      </div>
+    </div>
+    <div class="skill-group reveal">
+      <div class="skill-group-label">Backend</div>
+      <div class="skill-pills">
+        <span class="skill-pill">Spring Boot</span>
+        <span class="skill-pill">Flask</span>
+        <span class="skill-pill">REST APIs</span>
+        <span class="skill-pill">WebSocket</span>
+        <span class="skill-pill">Spring Security</span>
+        <span class="skill-pill">Spring Data JPA</span>
+      </div>
+    </div>
+    <div class="skill-group reveal">
+      <div class="skill-group-label">Frontend</div>
+      <div class="skill-pills">
+        <span class="skill-pill">React</span>
+        <span class="skill-pill">Axios</span>
+        <span class="skill-pill">Recharts</span>
+        <span class="skill-pill">SockJS</span>
+        <span class="skill-pill">STOMP.js</span>
+      </div>
+    </div>
+    <div class="skill-group reveal">
+      <div class="skill-group-label">AI / ML</div>
+      <div class="skill-pills">
+        <span class="skill-pill">scikit-learn</span>
+        <span class="skill-pill">pandas</span>
+        <span class="skill-pill">NumPy</span>
+        <span class="skill-pill">TF-IDF</span>
+        <span class="skill-pill">OpenAI API</span>
+      </div>
+    </div>
+    <div class="skill-group reveal">
+      <div class="skill-group-label">Databases</div>
+      <div class="skill-pills">
+        <span class="skill-pill">MySQL</span>
+        <span class="skill-pill">SQLite</span>
+      </div>
+    </div>
+    <div class="skill-group reveal">
+      <div class="skill-group-label">Tools & Services</div>
+      <div class="skill-pills">
+        <span class="skill-pill">Git</span>
+        <span class="skill-pill">GitHub</span>
+        <span class="skill-pill">Postman</span>
+        <span class="skill-pill">Twilio</span>
+        <span class="skill-pill">SendGrid</span>
+        <span class="skill-pill">Maven</span>
+        <span class="skill-pill">npm</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <div class="sec-header reveal">
+    <span class="sec-num">05</span>
+    <h2 class="sec-title">Certifications</h2>
+    <div class="sec-line"></div>
+  </div>
+  <div class="projects-grid">
+
+    <div class="project-card reveal">
+      <div class="project-top">
+        <div class="project-icon">📊</div>
+        <div style="font-family:'DM Mono',monospace; font-size:0.68rem; color:var(--gold); padding:0.25rem 0.6rem; background:rgba(245,158,11,0.1); border-radius:4px; border:1px solid rgba(245,158,11,0.2);">IN PROGRESS</div>
+      </div>
+      <div class="project-name">Google Data Analytics Certificate</div>
+      <p class="project-desc">Covers data collection, transformation, and visualization — directly applicable to the KPI dashboards and analytics pipelines built in ShopNest and ConnectAI.</p>
+      <div class="project-tags">
+        <span class="tag">Google · Coursera</span>
+        <span class="tag">SQL</span>
+        <span class="tag">Data Viz</span>
+        <span class="tag">Spreadsheets</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-top">
+        <div class="project-icon">🤖</div>
+        <div style="font-family:'DM Mono',monospace; font-size:0.68rem; color:var(--gold); padding:0.25rem 0.6rem; background:rgba(245,158,11,0.1); border-radius:4px; border:1px solid rgba(245,158,11,0.2);">IN PROGRESS</div>
+      </div>
+      <div class="project-name">Google IT Automation with Python</div>
+      <p class="project-desc">Focuses on Python scripting, automation, and REST API interaction — core skills used in ConnectAI's Flask backend and AI/ML recommendation pipeline.</p>
+      <div class="project-tags">
+        <span class="tag">Google · Coursera</span>
+        <span class="tag">Python</span>
+        <span class="tag">Automation</span>
+        <span class="tag">APIs</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-top">
+        <div class="project-icon">☁️</div>
+        <div style="font-family:'DM Mono',monospace; font-size:0.68rem; color:var(--accent2); padding:0.25rem 0.6rem; background:rgba(6,182,212,0.1); border-radius:4px; border:1px solid rgba(6,182,212,0.2);">PLANNED</div>
+      </div>
+      <div class="project-name">AWS Cloud Practitioner Essentials</div>
+      <p class="project-desc">Provides foundational cloud knowledge for deploying Spring Boot and React applications — the next step to host ShopNest and HospitalQ on production infrastructure.</p>
+      <div class="project-tags">
+        <span class="tag">AWS · Free</span>
+        <span class="tag">Cloud</span>
+        <span class="tag">Deployment</span>
+        <span class="tag">Infrastructure</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-top">
+        <div class="project-icon">⚛️</div>
+        <div style="font-family:'DM Mono',monospace; font-size:0.68rem; color:var(--accent2); padding:0.25rem 0.6rem; background:rgba(6,182,212,0.1); border-radius:4px; border:1px solid rgba(6,182,212,0.2);">PLANNED</div>
+      </div>
+      <div class="project-name">Meta Front-End Developer Certificate</div>
+      <p class="project-desc">Deepens React, JavaScript, and UI/UX skills — directly enhancing the frontend quality of DevLink and ConnectAI's social feed and dashboard interfaces.</p>
+      <div class="project-tags">
+        <span class="tag">Meta · Coursera</span>
+        <span class="tag">React</span>
+        <span class="tag">JavaScript</span>
+        <span class="tag">UI/UX</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-top">
+        <div class="project-icon">🔐</div>
+        <div style="font-family:'DM Mono',monospace; font-size:0.68rem; color:var(--accent2); padding:0.25rem 0.6rem; background:rgba(6,182,212,0.1); border-radius:4px; border:1px solid rgba(6,182,212,0.2);">PLANNED</div>
+      </div>
+      <div class="project-name">Microsoft Azure Fundamentals (AZ-900)</div>
+      <p class="project-desc">Validates cloud and security fundamentals aligned with enterprise-grade backend development — complementing JWT, RBAC, and CORS security practices used across all projects.</p>
+      <div class="project-tags">
+        <span class="tag">Microsoft · Free</span>
+        <span class="tag">Azure</span>
+        <span class="tag">Cloud Security</span>
+        <span class="tag">DevOps</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-top">
+        <div class="project-icon">💻</div>
+        <div style="font-family:'DM Mono',monospace; font-size:0.68rem; color:var(--accent2); padding:0.25rem 0.6rem; background:rgba(6,182,212,0.1); border-radius:4px; border:1px solid rgba(6,182,212,0.2);">PLANNED</div>
+      </div>
+      <div class="project-name">freeCodeCamp Full Stack Certification</div>
+      <p class="project-desc">Covers end-to-end web development from responsive design to APIs and databases — reinforcing the full-stack architecture patterns used across all 4 portfolio projects.</p>
+      <div class="project-tags">
+        <span class="tag">freeCodeCamp · Free</span>
+        <span class="tag">Full Stack</span>
+        <span class="tag">Node.js</span>
+        <span class="tag">MongoDB</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="sec-header reveal" style="justify-content:center; text-align:center;">
+    <span class="sec-num">06</span>
+    <h2 class="sec-title">Contact</h2>
+  </div>
+  <div class="contact-box reveal">
+    <p style="color:var(--muted); margin-bottom:0.5rem;">Have an opportunity or want to connect? My inbox is open.</p>
+    <a class="contact-email" href="mailto:haswanthavirneni99@gmail.com">haswanthavirneni99@gmail.com</a>
+    <div class="contact-links">
+      <a class="contact-link" href="https://linkedin.com/in/haswanth-avirneni-7297a0344" target="_blank">
+        ↗ LinkedIn
+      </a>
+      <a class="contact-link" href="https://github.com/haswanth-avirneni" target="_blank">
+        ↗ GitHub
+      </a>
+      <a class="contact-link" href="#" target="_blank">
+        ↗ Resume PDF
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Designed &amp; built by Haswanth Avirneni · 2025</p>
+</footer>
+
+<script>
+  // Photo upload
+  const photoInput = document.getElementById('photoInput');
+  const profilePhoto = document.getElementById('profilePhoto');
+  const photoPlaceholder = document.getElementById('photoPlaceholder');
+  if (photoInput) {
+    photoInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          profilePhoto.src = ev.target.result;
+          profilePhoto.style.display = 'block';
+          photoPlaceholder.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Active nav link highlight
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 100) current = sec.getAttribute('id');
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--accent)' : '';
+    });
+  });
+</script>
+</body>
+</html>
